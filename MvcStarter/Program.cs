@@ -4,11 +4,9 @@ using MvcStarter.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
-
-
 // Add services to the container.
 builder.Services.AddControllersWithViews();
-builder.Services.AddSingleton<ITodoStore, TodoStore>();
+builder.Services.AddScoped<ITodoStore, EfTodoStore>();
 
 var connectionString =
     builder.Configuration.GetConnectionString("TodoDatabase")
