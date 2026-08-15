@@ -10,6 +10,15 @@
     <label asp-for="Title">Title</label>
     <input asp-for="Title" />
     <span asp-validation-for="Title"></span>
+
+    <label asp-for="Priority"></label>
+
+    <select asp-for="Priority" asp-items="Html.GetEnumSelectList<TodoPriority>()">
+        <option value="">Choose a priority</option>
+    </select>
+
+    <span asp-validation-for="Priority"></span>
+
     <button type="submit">Submit</button>
 </form>
 

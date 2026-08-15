@@ -4,7 +4,7 @@ using MvcStarter.Models;
 
 namespace MvcStarter.Services
 {
-    public class EfTodoStore : ITodoStore
+    public class EfTodoStore
     {
         private readonly TodoDbContext _context;
 
@@ -13,9 +13,9 @@ namespace MvcStarter.Services
             _context = context;
         }
 
-        public TodoItem Add(string title)
+        public TodoItem Add(string title, TodoPriority priority)
         {
-            var newTodo = new TodoItem(title);
+            var newTodo = new TodoItem(title, priority);
             _context.Todos.Add(newTodo);
             _context.SaveChanges();
             return newTodo;

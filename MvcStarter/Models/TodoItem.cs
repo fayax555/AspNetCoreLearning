@@ -5,8 +5,9 @@
         public int Id { get; private set; }
         public string Title { get; private set; }
         public bool IsCompleted { get; private set; }
+        public TodoPriority Priority { get; private set; }
         
-        public TodoItem(int id, string title, bool isCompleted): this(title)
+        public TodoItem(int id, string title, TodoPriority priority, bool isCompleted): this(title, priority)
         {
             ArgumentOutOfRangeException.ThrowIfNegativeOrZero(id);
 
@@ -14,11 +15,17 @@
             IsCompleted = isCompleted;
         }
 
-        public TodoItem(string title)
+        public TodoItem(string title, TodoPriority priority)
         {
             ArgumentException.ThrowIfNullOrWhiteSpace(title);
 
+            if (!Enum.IsDefined(priority))
+            {
+                throw new ArgumentOutOfRangeException(nameof(priority));
+            }
+
             Title = title.Trim();
+            Priority = priority;
         }
 
         public void MarkCompleted()

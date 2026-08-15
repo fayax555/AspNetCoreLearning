@@ -6,9 +6,9 @@ namespace MvcStarter.Controllers
 {
     public class TodosController : Controller
     {
-        private readonly ITodoStore _todoStore;
+        private readonly EfTodoStore _todoStore;
 
-        public TodosController(ITodoStore todoStore)
+        public TodosController(EfTodoStore todoStore)
         {
             _todoStore = todoStore;
         }
@@ -49,7 +49,7 @@ namespace MvcStarter.Controllers
                 return View(input);
             }
 
-            _todoStore.Add(input.Title!);
+            _todoStore.Add(input.Title!, input.Priority!.Value);
 
             TempData["SuccessMessage"] = "Todo Created.";
             return RedirectToAction(nameof(Index));

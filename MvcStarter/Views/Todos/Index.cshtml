@@ -26,7 +26,7 @@
 <ul>
     @foreach(var todo in Model.Todos)
     {
-        <li>[@(todo.IsCompleted ? "x" : " ")] @todo.Title 
+        <li>[@(todo.IsCompleted ? "x" : " ")] @todo.Title - Priority: @todo.Priority
 
             @if (!todo.IsCompleted)
             {
