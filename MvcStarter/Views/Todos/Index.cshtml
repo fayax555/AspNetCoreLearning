@@ -1,0 +1,46 @@
+﻿@model TodoIndexViewModel
+
+@{
+    ViewData["Title"] = "Todos";
+}
+
+@if (TempData["SuccessMessage"] is string message)
+{
+    <p>@message</p>
+}
+
+<h1>Your Todo List</h1>
+
+<form method="get" asp-action="Index">
+    <input name="search" value="@Model.Search" />
+    <button type="submit">Search</button>
+</form>
+
+<a asp-action="Create">Create Todo</a>
+
+@if (Model.Todos.Count == 0)
+{
+    <p>No matching todos.</p>
+}
+
+<ul>
+    @foreach(var todo in Model.Todos)
+    {
+        <li>[@(todo.IsCompleted ? "x" : " ")] @todo.Title 
+
+            @if (!todo.IsCompleted)
+            {
+                <form method="post" asp-action="Complete" asp-route-id="@todo.Id">
+                    <button type="submit" >Complete</button>
+                </form>
+            }
+
+            <form method="post" asp-action="Delete" asp-route-id="@todo.Id">
+                <button type="submit">Delete</button>
+            </form>
+
+            <a asp-action="Details" asp-route-id="@todo.Id">Details</a>
+            <a asp-action="Edit" asp-route-id="@todo.Id">Edit</a>
+        </li>
+    }
+</ul>

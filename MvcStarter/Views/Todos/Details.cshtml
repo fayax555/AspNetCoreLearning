@@ -1,0 +1,15 @@
+﻿@model TodoItem
+
+@{
+    ViewData["Title"] = "Todo Details";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+<a asp-controller="Todos" asp-action="Index">Go to Todos</a>
+
+<ul>
+    <li>ID: @Model.Id</li>
+    <li>Title: @Model.Title</li>
+    <li>Status: @(Model.IsCompleted ? "Completed": "Incomplete")</li>
+</ul>

@@ -1,0 +1,17 @@
+﻿@model EditTodoInputModel
+
+@{
+    ViewData["Title"] = "Edit Todo";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+<form method="post" asp-controller="Todos" asp-action="Edit">
+    <input type="hidden" asp-for="Id" />
+
+    <label asp-for="Title">Title</label>
+    <input asp-for="Title" />
+    <span asp-validation-for="Title"></span>
+
+    <button type="submit">Save</button>
+</form>

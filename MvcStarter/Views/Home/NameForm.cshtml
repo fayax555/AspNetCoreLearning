@@ -1,0 +1,16 @@
+﻿@model NameInputModel
+
+@{
+    ViewData["Title"] = "Name Form";
+}
+
+<form method="post" asp-controller="Home" asp-action="SubmitName">
+    <label asp-for="Name">Name</label>
+    <input asp-for="Name" />
+    <span asp-validation-for="Name" ></span>
+    <button type="submit">Submit</button>
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
