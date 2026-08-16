@@ -51,12 +51,13 @@ namespace MvcStarter.Services
             return true;
         }
 
-        public bool TryRename(int id, string title)
+        public bool TryUpdate(int id, string title, TodoPriority priority)
         {
             var todo = _context.Todos.SingleOrDefault(todo => todo.Id == id);
             if (todo == null) return false;
 
             todo.Rename(title);
+            todo.ChangePriority(priority);
             _context.SaveChanges();
             return true;
         }

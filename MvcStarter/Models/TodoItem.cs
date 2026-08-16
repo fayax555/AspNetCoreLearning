@@ -38,5 +38,15 @@
             ArgumentException.ThrowIfNullOrWhiteSpace(title);
             Title = title.Trim();
         }
+
+        public void ChangePriority(TodoPriority priority)
+        {
+            if (!Enum.IsDefined(priority))
+            {
+                throw new ArgumentOutOfRangeException(nameof(priority));
+            }
+
+            Priority = priority;
+        }
     }
 }

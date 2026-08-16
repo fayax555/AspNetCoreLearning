@@ -129,7 +129,8 @@ namespace MvcStarter.Controllers
             var model = new EditTodoInputModel
             {
                 Id = todoInDb.Id,
-                Title = todoInDb.Title
+                Title = todoInDb.Title,
+                Priority = todoInDb.Priority
             };
 
             return View(model);
@@ -144,7 +145,7 @@ namespace MvcStarter.Controllers
                 return View(input);
             }
 
-            if (!_todoStore.TryRename(input.Id, input.Title!))
+            if (!_todoStore.TryUpdate(input.Id, input.Title!, input.Priority!.Value))
             {
                 return NotFound();
             }
