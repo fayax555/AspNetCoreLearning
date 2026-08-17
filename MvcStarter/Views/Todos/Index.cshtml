@@ -13,6 +13,11 @@
 
 <form method="get" asp-action="Index">
     <input name="search" value="@Model.Search" />
+
+    <select asp-for="SelectedPriority" asp-items="Html.GetEnumSelectList<TodoPriority>()">
+        <option value="">All priorities</option>
+    </select>
+
     <button type="submit">Search</button>
 </form>
 

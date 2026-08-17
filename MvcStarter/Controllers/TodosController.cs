@@ -14,19 +14,29 @@ namespace MvcStarter.Controllers
         }
 
         [HttpGet]
-        public IActionResult Index(string? search)
+        public IActionResult Index(string? search, TodoPriority? selectedPriority)
         {
             var filteredTodos = _todoStore.GetAll();
 
             if (!string.IsNullOrWhiteSpace(search))
             {
-               filteredTodos = filteredTodos.Where(todo => todo.Title.Contains(search!.Trim(), StringComparison.OrdinalIgnoreCase)).ToList();
+               filteredTodos = filteredTodos
+                    .Where(todo => todo.Title.Contains(search!.Trim(), StringComparison.OrdinalIgnoreCase))
+                    .ToList();
+            }
+
+            if (selectedPriority.HasValue)
+            {
+                filteredTodos = filteredTodos
+                    .Where(todo => todo.Priority == selectedPriority.Value)
+                    .ToList();
             }
 
             var model = new TodoIndexViewModel
             {
                 Todos = filteredTodos,
-                Search = search
+                Search = search,
+                SelectedPriority = selectedPriority
             };
 
             return View(model);
