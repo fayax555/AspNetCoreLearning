@@ -6,5 +6,7 @@ namespace MvcStarter.Models
         public required IReadOnlyList<TodoItem> Todos { get; set; }
         public string? Search { get; set; }
         public TodoPriority? SelectedPriority { get; set; }
+        public int CurrentPage { get; set; }
+        public int TotalPages { get; set; }
     }
 }

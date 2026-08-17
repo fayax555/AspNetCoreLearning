@@ -14,8 +14,13 @@ namespace MvcStarter.Controllers
         }
 
         [HttpGet]
-        public IActionResult Index(string? search, TodoPriority? selectedPriority)
+        public IActionResult Index(string? search, TodoPriority? selectedPriority, int page = 1)
         {
+            if (page < 1)
+            {
+                return BadRequest();
+            }
+
             var filteredTodos = _todoStore.GetAll();
 
             if (!string.IsNullOrWhiteSpace(search))
@@ -38,11 +43,27 @@ namespace MvcStarter.Controllers
                 .ThenBy(todo => todo.Id)
                 .ToList();
 
+            const int pageSize = 3;
+
+            var totalPages = (int)Math.Ceiling(filteredTodos.Count / (double)pageSize);
+
+            if (totalPages > 0 && page > totalPages)
+            {
+                return NotFound();
+            }
+
+            var pageTodos = filteredTodos
+                .Skip((page - 1) * pageSize)
+                .Take(pageSize)
+                .ToList();
+
             var model = new TodoIndexViewModel
             {
-                Todos = filteredTodos,
+                Todos = pageTodos,
                 Search = search,
-                SelectedPriority = selectedPriority
+                SelectedPriority = selectedPriority,
+                CurrentPage = page,
+                TotalPages = totalPages,
             };
 
             return View(model);
