@@ -32,6 +32,12 @@ namespace MvcStarter.Controllers
                     .ToList();
             }
 
+            filteredTodos = filteredTodos
+                .OrderBy(todo => todo.IsCompleted)
+                .ThenBy(todo => todo.Priority)
+                .ThenBy(todo => todo.Id)
+                .ToList();
+
             var model = new TodoIndexViewModel
             {
                 Todos = filteredTodos,
