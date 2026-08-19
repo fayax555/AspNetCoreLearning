@@ -183,6 +183,147 @@ The `start_url` must remain on the same origin as the manifest.
 
 The filename `manifest.json` is conventional, not mandatory. JSON is convenient because most servers already return it as `application/json`.
 
+### Example: a separate MVC app hosted under `/MvcStarter`
+
+Suppose one server exposes two separate projects:
+
+```text
+https://mira.gov.mv/             Main website
+https://mira.gov.mv/MvcStarter/  Separate ASP.NET Core MVC application
+```
+
+The browser does not choose an installed app from the domain name alone. The page's `<link rel="manifest">` selects the manifest offered for installation, and the manifest's `id` gives that PWA its identity.
+
+The main website must not link to the MvcStarter manifest. Pages rendered by MvcStarter should link to:
+
+```html
+<link rel="manifest" href="/MvcStarter/manifest.json" />
+```
+
+Use a manifest dedicated to the sub-application:
+
+```json
+{
+  "id": "/MvcStarter/",
+  "name": "MvcStarter Todos",
+  "short_name": "Todos",
+  "description": "A todo management application",
+  "start_url": "/MvcStarter/Todos",
+  "scope": "/MvcStarter/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#0d6efd",
+  "icons": [
+    {
+      "src": "/MvcStarter/icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/MvcStarter/icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    }
+  ]
+}
+```
+
+If the same manifest file must work at the origin root during development and under `/MvcStarter/` after deployment, keep the app identity explicit but make resource and navigation URLs relative to the manifest:
+
+```json
+{
+  "id": "/MvcStarter/",
+  "name": "MvcStarter Todos",
+  "short_name": "Todos",
+  "description": "A todo management application",
+  "start_url": "./Todos",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#0d6efd",
+  "icons": [
+    {
+      "src": "./icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "./icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    }
+  ]
+}
+```
+
+When this manifest is served as `/manifest.json`, `./Todos`, `./`, and `./icons/...` resolve at the origin root. When it is served as `/MvcStarter/manifest.json`, they resolve under `/MvcStarter/`.
+
+The `id` is intentionally different. A relative manifest `id` is resolved against the origin of `start_url`, not against the manifest's directory. Use the explicit root-relative `/MvcStarter/` value to keep this PWA distinct from a possible root-site PWA whose ID is `/`.
+
+The trailing slash in `/MvcStarter/` is intentional. It limits the scope to that path and its children instead of matching unrelated paths that merely begin with `MvcStarter`.
+
+With this configuration:
+
+- Installing from a MvcStarter page installs the app identified by `/MvcStarter/`.
+- Launching the icon opens `/MvcStarter/Todos`.
+- `/MvcStarter/...` pages remain inside the standalone app experience.
+- Navigating to `/` leaves the MvcStarter scope and is treated as navigation outside that installed app.
+- The root website can have no manifest, or it can have a different manifest with a different `id`.
+
+If both projects are PWAs, give each one a distinct manifest, name, icon, `id`, and start URL. A root app with scope `/` overlaps every path on the origin, including `/MvcStarter/`. Installation from each project's own pages can still use its linked manifest and distinct `id`, but a separate subdomain such as `mvcstarter.mira.gov.mv` provides cleaner isolation when both apps require advanced URL handling.
+
+### Make ASP.NET Core aware of the path base
+
+The Razor URL `~/manifest.json` should render as `/MvcStarter/manifest.json` only when ASP.NET Core knows that the request path base is `/MvcStarter`.
+
+After deployment, inspect the rendered HTML. This source:
+
+```html
+<link rel="manifest" href="~/manifest.json" />
+```
+
+must become:
+
+```html
+<link rel="manifest" href="/MvcStarter/manifest.json" />
+```
+
+Also verify that MVC links, redirects, stylesheets, scripts, and images include `/MvcStarter` exactly once.
+
+How the path base is supplied depends on the host:
+
+- An IIS application, virtual application, or reverse proxy may already provide the correct path base.
+- If the proxy passes the complete path, such as `/MvcStarter/Todos`, the app can use `UsePathBase` before routing:
+
+```csharp
+app.UsePathBase("/MvcStarter");
+
+app.UseHttpsRedirection();
+app.UseRouting();
+```
+
+- If the proxy removes `/MvcStarter` before forwarding the request, the proxy and ASP.NET Core must preserve the external prefix through `Request.PathBase` or a trusted forwarded-prefix configuration. Do not blindly add `UsePathBase` when the incoming backend request no longer contains the prefix.
+
+Test the deployed result rather than assuming the hosting configuration is correct:
+
+```text
+https://mira.gov.mv/MvcStarter/manifest.json
+https://mira.gov.mv/MvcStarter/icons/icon-192.png
+https://mira.gov.mv/MvcStarter/icons/icon-512.png
+https://mira.gov.mv/MvcStarter/Todos
+```
+
+In browser DevTools, check **Application > Manifest** and confirm:
+
+- Computed App Id identifies `/MvcStarter/`.
+- Start URL is `/MvcStarter/Todos`.
+- Scope is `/MvcStarter/`.
+- Both icons load from `/MvcStarter/icons/`.
+
 ## Step 3: link the manifest from the MVC layout
 
 Add the following inside `<head>` in `Views/Shared/_Layout.cshtml`:
@@ -195,6 +336,8 @@ Add the following inside `<head>` in `Views/Shared/_Layout.cshtml`:
 The shared layout is the right location because every installable page should reference the same manifest.
 
 At this point, the application has enough metadata for browser menu-based installation on current Chromium browsers. A service worker is still valuable for a controlled offline experience and other PWA features.
+
+If installation and standalone display are the only requirements, this is a valid stopping point. Steps 5 through 8 are optional and add a custom offline experience; they are not required for the install-only goal.
 
 ## Step 4: verify the manifest before adding a service worker
 
@@ -610,7 +753,10 @@ For a traditional server-rendered MVC application, this is a separate architectu
 - [Static files in ASP.NET Core](https://learn.microsoft.com/en-us/aspnet/core/fundamentals/static-files?view=aspnetcore-9.0)
 - [Chrome installability criteria update](https://developer.chrome.com/blog/update-install-criteria)
 - [ServiceWorkerContainer.register() and scope - MDN](https://developer.mozilla.org/en-US/docs/Web/API/ServiceWorkerContainer/register)
+- [Web app manifest scope - MDN](https://developer.mozilla.org/en-US/docs/Web/Progressive_web_apps/Manifest/Reference/scope)
+- [Web app manifest id - MDN](https://developer.mozilla.org/en-US/docs/Web/Progressive_web_apps/Manifest/Reference/id)
+- [Uniquely identifying a PWA with the manifest id - Chrome for Developers](https://developer.chrome.com/docs/capabilities/pwa-manifest-id)
+- [Configure ASP.NET Core for proxy path bases](https://learn.microsoft.com/en-us/aspnet/core/host-and-deploy/proxy-load-balancer?view=aspnetcore-9.0#work-with-path-base-and-proxies-that-change-the-request-path)
 - [Service worker lifecycle - web.dev](https://web.dev/articles/service-worker-lifecycle)
 - [WebKit features in Safari 26](https://webkit.org/blog/17333/webkit-features-in-safari-26-0/)
 - [Web Push and Home Screen web apps on iOS and iPadOS](https://webkit.org/blog/13878/web-push-for-web-apps-on-ios-and-ipados/)
-
