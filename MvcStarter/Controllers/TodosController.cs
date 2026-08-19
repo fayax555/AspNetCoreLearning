@@ -14,7 +14,7 @@ namespace MvcStarter.Controllers
         }
 
         [HttpGet]
-        public IActionResult Index(string? search, TodoPriority? selectedPriority, int page = 1)
+        public IActionResult Index(string? search, TodoPriority? selectedPriority, int? selectedCategoryId, int page = 1)
         {
             if (page < 1)
             {
@@ -34,6 +34,13 @@ namespace MvcStarter.Controllers
             {
                 filteredTodos = filteredTodos
                     .Where(todo => todo.Priority == selectedPriority.Value)
+                    .ToList();
+            }
+
+            if (selectedCategoryId.HasValue)
+            {
+                filteredTodos = filteredTodos
+                    .Where(todo => todo.CategoryId == selectedCategoryId)
                     .ToList();
             }
 
@@ -64,6 +71,8 @@ namespace MvcStarter.Controllers
                 SelectedPriority = selectedPriority,
                 CurrentPage = page,
                 TotalPages = totalPages,
+                SelectedCategoryId = selectedCategoryId,
+                Categories = _todoStore.GetCategories(),
             };
 
             return View(model);

@@ -18,6 +18,15 @@
         <option value="">All priorities</option>
     </select>
 
+    <select asp-for="SelectedCategoryId">
+        <option value="">All categories</option>
+
+        @foreach (var category in Model.Categories)
+        {
+            <option value="@category.Id">@category.Name</option>
+        }
+    </select>
+
     <button type="submit">Search</button>
 </form>
 
@@ -58,7 +67,8 @@
             <a asp-action="Index"
                 asp-route-search="@Model.Search"
                 asp-route-selectedPriority="@Model.SelectedPriority" 
-                asp-route-page="@(Model.CurrentPage - 1)">
+                asp-route-page="@(Model.CurrentPage - 1)"
+                asp-route-selectedCategoryId="@(Model.SelectedCategoryId)">
                 Previous
             </a>
         }
@@ -70,7 +80,9 @@
             <a asp-action="Index" 
                 asp-route-search="@Model.Search" 
                 asp-route-selectedPriority="@Model.SelectedPriority" 
-                asp-route-page="@(Model.CurrentPage + 1)">Next
+                asp-route-page="@(Model.CurrentPage + 1)"
+                asp-route-selectedCategoryId="@(Model.SelectedCategoryId)"
+            >Next
             </a>
         }
     </nav>

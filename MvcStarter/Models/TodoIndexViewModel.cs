@@ -8,5 +8,7 @@ namespace MvcStarter.Models
         public TodoPriority? SelectedPriority { get; set; }
         public int CurrentPage { get; set; }
         public int TotalPages { get; set; }
+        public int? SelectedCategoryId { get; set; }
+        public IReadOnlyList<Category> Categories { get; set; } = Array.Empty<Category>();
     }
 }
