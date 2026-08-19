@@ -13,4 +13,5 @@
     <li>Title: @Model.Title</li>
     <li>Status: @(Model.IsCompleted ? "Completed": "Incomplete")</li>
     <li>Priority: @Model.Priority</li>
+    <li>Category: @(Model.Category?.Name ?? "None")</li>
 </ul>

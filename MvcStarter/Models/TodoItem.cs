@@ -50,5 +50,18 @@
 
             Priority = priority;
         }
+
+        public void ChangeCategory(int? categoryId)
+        {
+            if (categoryId.HasValue)
+            {
+                ArgumentOutOfRangeException.ThrowIfNegativeOrZero(
+                    categoryId.Value,
+                    nameof(categoryId)
+                );
+            }
+
+            CategoryId = categoryId;
+        }
     }
 }

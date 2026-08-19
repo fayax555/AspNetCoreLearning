@@ -13,9 +13,10 @@ namespace MvcStarter.Services
             _context = context;
         }
 
-        public TodoItem Add(string title, TodoPriority priority)
+        public TodoItem Add(string title, TodoPriority priority, int? categoryId)
         {
             var newTodo = new TodoItem(title, priority);
+            newTodo.ChangeCategory(categoryId);
             _context.Todos.Add(newTodo);
             _context.SaveChanges();
             return newTodo;
@@ -23,12 +24,15 @@ namespace MvcStarter.Services
 
         public IReadOnlyList<TodoItem> GetAll()
         {
-            return _context.Todos.AsNoTracking().ToList();
+            return _context.Todos.Include(todo => todo.Category).AsNoTracking().ToList();
         }
 
         public TodoItem? GetById(int id)
         {
-            return _context.Todos.AsNoTracking().SingleOrDefault(todo => todo.Id == id);
+            return _context.Todos
+                .Include(todo => todo.Category)
+                .AsNoTracking()
+                .SingleOrDefault(todo => todo.Id == id);
         }
 
         public bool TryDelete(int id)
@@ -51,15 +55,24 @@ namespace MvcStarter.Services
             return true;
         }
 
-        public bool TryUpdate(int id, string title, TodoPriority priority)
+        public bool TryUpdate(int id, string title, TodoPriority priority, int? categoryId)
         {
             var todo = _context.Todos.SingleOrDefault(todo => todo.Id == id);
             if (todo == null) return false;
 
             todo.Rename(title);
             todo.ChangePriority(priority);
+            todo.ChangeCategory(categoryId);
+
             _context.SaveChanges();
             return true;
         }
+
+        public IReadOnlyList<Category> GetCategories()
+        {
+            return _context.Categories.AsNoTracking().OrderBy(category => category.Name).ToList();
+        }
+
+
     }
 }

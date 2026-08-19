@@ -72,7 +72,10 @@ namespace MvcStarter.Controllers
         [HttpGet]
         public IActionResult Create()
         {
-            var model = new CreateTodoInputModel();
+            var model = new CreateTodoInputModel
+            {
+                Categories = _todoStore.GetCategories()
+            };
 
             return View(model);
         }
@@ -83,10 +86,11 @@ namespace MvcStarter.Controllers
         {
             if (!ModelState.IsValid)
             {
+                input.Categories = _todoStore.GetCategories();
                 return View(input);
             }
 
-            _todoStore.Add(input.Title!, input.Priority!.Value);
+            _todoStore.Add(input.Title!, input.Priority!.Value, input.CategoryId);
 
             TempData["SuccessMessage"] = "Todo Created.";
             return RedirectToAction(nameof(Index));
@@ -167,7 +171,9 @@ namespace MvcStarter.Controllers
             {
                 Id = todoInDb.Id,
                 Title = todoInDb.Title,
-                Priority = todoInDb.Priority
+                Priority = todoInDb.Priority,
+                CategoryId = todoInDb.CategoryId,
+                Categories = _todoStore.GetCategories(),
             };
 
             return View(model);
@@ -179,10 +185,11 @@ namespace MvcStarter.Controllers
         {
             if (!ModelState.IsValid)
             {
+                input.Categories = _todoStore.GetCategories();
                 return View(input);
             }
 
-            if (!_todoStore.TryUpdate(input.Id, input.Title!, input.Priority!.Value))
+            if (!_todoStore.TryUpdate(input.Id, input.Title!, input.Priority!.Value, input.CategoryId))
             {
                 return NotFound();
             }

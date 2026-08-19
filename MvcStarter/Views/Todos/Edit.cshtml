@@ -20,5 +20,18 @@
 
     <span asp-validation-for="Priority"></span>
 
+    <label asp-for="CategoryId">Category</label>
+
+    <select asp-for="CategoryId">
+        <option value="">No category</option>
+
+        @foreach (var category in Model.Categories)
+        {
+            <option value="@category.Id">@category.Name</option>
+        }
+    </select>
+
+    <span asp-validation-for="CategoryId"></span>
+
     <button type="submit">Save</button>
 </form>
