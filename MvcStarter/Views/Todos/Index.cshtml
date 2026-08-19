@@ -31,7 +31,7 @@
 <ul>
     @foreach(var todo in Model.Todos)
     {
-        <li>[@(todo.IsCompleted ? "x" : " ")] @todo.Title - Priority: @todo.Priority - Category:@(todo.Category?.Name ?? "None")
+        <li>[@(todo.IsCompleted ? "x" : " ")] @todo.Title - Priority: @todo.Priority - Category: @(todo.Category?.Name ?? "None")
 
             @if (!todo.IsCompleted)
             {
