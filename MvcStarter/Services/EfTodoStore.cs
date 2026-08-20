@@ -22,9 +22,30 @@ namespace MvcStarter.Services
             return newTodo;
         }
 
-        public IReadOnlyList<TodoItem> GetAll()
+        public IReadOnlyList<TodoItem> GetFilteredTodos(string? search, TodoPriority? priority, int? categoryId)
         {
-            return _context.Todos.Include(todo => todo.Category).AsNoTracking().ToList();
+            var query = _context.Todos.Include(todo => todo.Category).AsNoTracking();
+
+            if (!string.IsNullOrWhiteSpace(search))
+            {
+                query = query.Where(todo => EF.Functions.Like(todo.Title, $"%{search!.Trim()}%"));
+            }
+
+            if (priority.HasValue)
+            {
+                query = query.Where(todo => todo.Priority == priority);
+            }
+
+            if (categoryId.HasValue)
+            {
+                query = query.Where(todo => todo.CategoryId == categoryId);
+            }
+
+            return query
+                .OrderBy(todo => todo.IsCompleted)
+                .ThenBy(todo => todo.Priority)
+                .ThenBy(todo => todo.Id)
+                .ToList();
         }
 
         public TodoItem? GetById(int id)

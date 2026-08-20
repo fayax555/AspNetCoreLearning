@@ -21,34 +21,7 @@ namespace MvcStarter.Controllers
                 return BadRequest();
             }
 
-            var filteredTodos = _todoStore.GetAll();
-
-            if (!string.IsNullOrWhiteSpace(search))
-            {
-               filteredTodos = filteredTodos
-                    .Where(todo => todo.Title.Contains(search!.Trim(), StringComparison.OrdinalIgnoreCase))
-                    .ToList();
-            }
-
-            if (selectedPriority.HasValue)
-            {
-                filteredTodos = filteredTodos
-                    .Where(todo => todo.Priority == selectedPriority.Value)
-                    .ToList();
-            }
-
-            if (selectedCategoryId.HasValue)
-            {
-                filteredTodos = filteredTodos
-                    .Where(todo => todo.CategoryId == selectedCategoryId)
-                    .ToList();
-            }
-
-            filteredTodos = filteredTodos
-                .OrderBy(todo => todo.IsCompleted)
-                .ThenBy(todo => todo.Priority)
-                .ThenBy(todo => todo.Id)
-                .ToList();
+            var filteredTodos = _todoStore.GetFilteredTodos(search, selectedPriority, selectedCategoryId);
 
             const int pageSize = 3;
 
