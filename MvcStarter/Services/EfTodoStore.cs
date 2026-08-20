@@ -22,7 +22,8 @@ namespace MvcStarter.Services
             return newTodo;
         }
 
-        public IReadOnlyList<TodoItem> GetFilteredTodos(string? search, TodoPriority? priority, int? categoryId)
+        public (IReadOnlyList<TodoItem> Todos, int TotalCount)
+            GetFilteredTodos(string? search, TodoPriority? priority, int? categoryId, int page, int pageSize)
         {
             var query = _context.Todos.Include(todo => todo.Category).AsNoTracking();
 
@@ -41,11 +42,17 @@ namespace MvcStarter.Services
                 query = query.Where(todo => todo.CategoryId == categoryId);
             }
 
-            return query
+            var totalCount = query.Count();
+
+            var todos = query
                 .OrderBy(todo => todo.IsCompleted)
                 .ThenBy(todo => todo.Priority)
                 .ThenBy(todo => todo.Id)
+                .Skip((page - 1) * pageSize)
+                .Take(pageSize)
                 .ToList();
+
+            return (todos, totalCount);
         }
 
         public TodoItem? GetById(int id)

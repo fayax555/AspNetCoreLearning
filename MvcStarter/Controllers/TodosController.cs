@@ -21,21 +21,16 @@ namespace MvcStarter.Controllers
                 return BadRequest();
             }
 
-            var filteredTodos = _todoStore.GetFilteredTodos(search, selectedPriority, selectedCategoryId);
-
             const int pageSize = 3;
 
-            var totalPages = (int)Math.Ceiling(filteredTodos.Count / (double)pageSize);
+            var (pageTodos, totalCount) = _todoStore.GetFilteredTodos(search, selectedPriority, selectedCategoryId, page, pageSize);
+
+            var totalPages = (int)Math.Ceiling(totalCount / (double)pageSize);
 
             if (totalPages > 0 && page > totalPages)
             {
                 return NotFound();
             }
-
-            var pageTodos = filteredTodos
-                .Skip((page - 1) * pageSize)
-                .Take(pageSize)
-                .ToList();
 
             var model = new TodoIndexViewModel
             {
