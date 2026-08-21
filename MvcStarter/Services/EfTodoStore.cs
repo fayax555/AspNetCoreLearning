@@ -105,7 +105,5 @@ namespace MvcStarter.Services
         {
             return _context.Categories.Any(category => category.Id == id);
         }
-
-
     }
 }
