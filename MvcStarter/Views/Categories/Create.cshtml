@@ -1,0 +1,18 @@
+﻿@model CreateCategoryInputModel
+
+@{
+    ViewData["Title"] = "Create category";
+}
+
+<form method="post" asp-action="Create">
+    <label asp-for="Name">Name</label>
+    <input asp-for="Name" />
+    <span asp-validation-for="Name"></span>
+
+    <button type="submit">Submit</button>
+</form>
+
+@section Scripts
+{
+    <partial name="_ValidationScriptsPartial" />
+}

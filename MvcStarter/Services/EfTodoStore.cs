@@ -105,5 +105,18 @@ namespace MvcStarter.Services
         {
             return _context.Categories.Any(category => category.Id == id);
         }
+
+        public bool CategoryNameExists(string name)
+        {
+            return _context.Categories.Any(category => category.Name.ToUpper() == name.Trim().ToUpper());
+        }
+
+        public Category AddCategory(string name)
+        {
+            var category = new Category(name);
+            _context.Categories.Add(category);
+            _context.SaveChanges();
+            return category;
+        }
     }
 }
