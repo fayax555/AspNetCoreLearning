@@ -101,6 +101,11 @@ namespace MvcStarter.Services
             return _context.Categories.AsNoTracking().OrderBy(category => category.Name).ToList();
         }
 
+        public bool CategoryExists(int id)
+        {
+            return _context.Categories.Any(category => category.Id == id);
+        }
+
 
     }
 }

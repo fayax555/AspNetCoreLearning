@@ -61,6 +61,11 @@ namespace MvcStarter.Controllers
         [HttpPost]
         public IActionResult Create(CreateTodoInputModel input)
         {
+            if (input.CategoryId.HasValue && !_todoStore.CategoryExists(input.CategoryId.Value))
+            {
+                ModelState.AddModelError(nameof(input.CategoryId), "Please select a valid category.");
+            }
+
             if (!ModelState.IsValid)
             {
                 input.Categories = _todoStore.GetCategories();
@@ -160,6 +165,11 @@ namespace MvcStarter.Controllers
         [HttpPost]
         public IActionResult Edit(EditTodoInputModel input)
         {
+            if (input.CategoryId.HasValue && !_todoStore.CategoryExists(input.CategoryId.Value))
+            {
+                ModelState.AddModelError(nameof(input.CategoryId), "Please select a valid category.");
+            }
+
             if (!ModelState.IsValid)
             {
                 input.Categories = _todoStore.GetCategories();
