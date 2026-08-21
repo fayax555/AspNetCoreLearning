@@ -25,8 +25,7 @@ namespace MvcStarter.Data
                  .HasMaxLength(100);
 
                 entity.Property(todo => todo.Priority)
-                 .IsRequired()
-                 .HasDefaultValue(TodoPriority.Medium);
+                 .IsRequired();
 
                 entity.HasOne(todo => todo.Category)
                     .WithMany()
