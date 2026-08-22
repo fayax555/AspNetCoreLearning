@@ -6,8 +6,12 @@
         public string Title { get; private set; }
         public bool IsCompleted { get; private set; }
         public TodoPriority Priority { get; private set; }
+
+        public DateOnly? DueDate { get; private set; }
+
         public int? CategoryId { get; private set; }
         public Category? Category { get; private set; }
+
         
         public TodoItem(int id, string title, TodoPriority priority, bool isCompleted): this(title, priority)
         {
@@ -62,6 +66,11 @@
             }
 
             CategoryId = categoryId;
+        }
+
+        public void ChangeDueDate(DateOnly? dueDate)
+        {
+            DueDate = dueDate;
         }
     }
 }

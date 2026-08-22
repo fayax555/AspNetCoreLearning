@@ -12,11 +12,13 @@ namespace MvcStarter.Models
         [EnumDataType(typeof(TodoPriority), ErrorMessage = "Please select a valid priority.")]
         public TodoPriority? Priority { get; set; }
 
+        [Display(Name = "Due date")]
+        [DataType(DataType.Date)]
+        public DateOnly? DueDate { get; set; }
+
         [Range(1, int.MaxValue, ErrorMessage = "Please select a valid category.")]
         public int? CategoryId { get; set; }
 
         public IReadOnlyList<Category> Categories { get; set; } = Array.Empty<Category>();
-
-        
     }
 }

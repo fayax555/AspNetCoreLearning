@@ -36,28 +36,32 @@
 {
     <p>No matching todos.</p>
 }
+else
+{
+    <ul>
+        @foreach (var todo in Model.Todos)
+        {
+            <li>
+                [@(todo.IsCompleted ? "x" : " ")] @todo.Title - Priority: @todo.Priority - Category: @(todo.Category?.Name ?? "None")
+                - Due Date: @(todo.DueDate?.ToString("yyyy-MM-dd") ?? "None")
 
-<ul>
-    @foreach(var todo in Model.Todos)
-    {
-        <li>[@(todo.IsCompleted ? "x" : " ")] @todo.Title - Priority: @todo.Priority - Category: @(todo.Category?.Name ?? "None")
+                @if (!todo.IsCompleted)
+                {
+                    <form method="post" asp-action="Complete" asp-route-id="@todo.Id">
+                        <button type="submit">Complete</button>
+                    </form>
+                }
 
-            @if (!todo.IsCompleted)
-            {
-                <form method="post" asp-action="Complete" asp-route-id="@todo.Id">
-                    <button type="submit" >Complete</button>
+                <form method="post" asp-action="Delete" asp-route-id="@todo.Id">
+                    <button type="submit">Delete</button>
                 </form>
-            }
 
-            <form method="post" asp-action="Delete" asp-route-id="@todo.Id">
-                <button type="submit">Delete</button>
-            </form>
-
-            <a asp-action="Details" asp-route-id="@todo.Id">Details</a>
-            <a asp-action="Edit" asp-route-id="@todo.Id">Edit</a>
-        </li>
-    }
-</ul>
+                <a asp-action="Details" asp-route-id="@todo.Id">Details</a>
+                <a asp-action="Edit" asp-route-id="@todo.Id">Edit</a>
+            </li>
+        }
+    </ul>
+}
 
 @if (Model.TotalPages > 1)
 {
@@ -65,10 +69,10 @@
         @if (Model.CurrentPage > 1)
         {
             <a asp-action="Index"
-                asp-route-search="@Model.Search"
-                asp-route-selectedPriority="@Model.SelectedPriority" 
-                asp-route-page="@(Model.CurrentPage - 1)"
-                asp-route-selectedCategoryId="@(Model.SelectedCategoryId)">
+               asp-route-search="@Model.Search"
+               asp-route-selectedPriority="@Model.SelectedPriority"
+               asp-route-page="@(Model.CurrentPage - 1)"
+               asp-route-selectedCategoryId="@(Model.SelectedCategoryId)">
                 Previous
             </a>
         }
@@ -77,12 +81,12 @@
 
         @if (Model.CurrentPage < Model.TotalPages)
         {
-            <a asp-action="Index" 
-                asp-route-search="@Model.Search" 
-                asp-route-selectedPriority="@Model.SelectedPriority" 
-                asp-route-page="@(Model.CurrentPage + 1)"
-                asp-route-selectedCategoryId="@(Model.SelectedCategoryId)"
-            >Next
+            <a asp-action="Index"
+               asp-route-search="@Model.Search"
+               asp-route-selectedPriority="@Model.SelectedPriority"
+               asp-route-page="@(Model.CurrentPage + 1)"
+               asp-route-selectedCategoryId="@(Model.SelectedCategoryId)">
+                Next
             </a>
         }
     </nav>

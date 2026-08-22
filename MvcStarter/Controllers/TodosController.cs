@@ -74,7 +74,7 @@ namespace MvcStarter.Controllers
                 return View(input);
             }
 
-            _todoStore.Add(input.Title!, input.Priority!.Value, input.CategoryId);
+            _todoStore.Add(input.Title!, input.Priority!.Value, input.DueDate, input.CategoryId);
 
             TempData["SuccessMessage"] = "Todo Created.";
             return RedirectToAction(nameof(Index));
@@ -156,6 +156,7 @@ namespace MvcStarter.Controllers
                 Id = todoInDb.Id,
                 Title = todoInDb.Title,
                 Priority = todoInDb.Priority,
+                DueDate = todoInDb.DueDate,
                 CategoryId = todoInDb.CategoryId,
                 Categories = _categoryStore.GetCategories(),
             };
@@ -178,7 +179,7 @@ namespace MvcStarter.Controllers
                 return View(input);
             }
 
-            if (!_todoStore.TryUpdate(input.Id, input.Title!, input.Priority!.Value, input.CategoryId))
+            if (!_todoStore.TryUpdate(input.Id, input.Title!, input.Priority!.Value, input.DueDate, input.CategoryId))
             {
                 return NotFound();
             }

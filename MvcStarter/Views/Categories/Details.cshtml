@@ -17,7 +17,7 @@ else
     <ul>
         @foreach (var todo in Model.Todos)
         {
-            <li>@todo.Title - @todo.Priority - @todo.IsCompleted</li>
+            <li>@todo.Title - @todo.Priority - @todo.IsCompleted - Due date: @(todo.DueDate?.ToString("yyyy-MM-dd") ?? "None")</li>
         }
     </ul>
 }

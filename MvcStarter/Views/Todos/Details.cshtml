@@ -13,5 +13,6 @@
     <li>Title: @Model.Title</li>
     <li>Status: @(Model.IsCompleted ? "Completed": "Incomplete")</li>
     <li>Priority: @Model.Priority</li>
+    <li>Due date: @(Model.DueDate?.ToString("yyyy-MM-dd") ?? "None")</li>
     <li>Category: @(Model.Category?.Name ?? "None")</li>
 </ul>
