@@ -16,5 +16,11 @@
             ArgumentException.ThrowIfNullOrWhiteSpace(name);
             Name = name.Trim();
         }
+
+        public void Rename(string name)
+        {
+            ArgumentException.ThrowIfNullOrWhiteSpace(name);
+            Name = name.Trim();
+        }
     }
 }

@@ -106,9 +106,19 @@ namespace MvcStarter.Services
             return _context.Categories.Any(category => category.Id == id);
         }
 
-        public bool CategoryNameExists(string name)
+        public bool CategoryNameExists(string name, int? excludedCategoryId = null)
         {
-            return _context.Categories.Any(category => category.Name.ToUpper() == name.Trim().ToUpper());
+            var query = _context.Categories.AsQueryable();
+
+            if (excludedCategoryId != null)
+            {
+                query = query
+                .Where(category => category.Id != excludedCategoryId);
+            }
+
+            return query
+                .Any(category => category.Name.ToUpper() == name.Trim()
+                .ToUpper());
         }
 
         public Category AddCategory(string name)
@@ -117,6 +127,25 @@ namespace MvcStarter.Services
             _context.Categories.Add(category);
             _context.SaveChanges();
             return category;
+        }
+
+        public Category? GetCategoryById(int id)
+        {
+            return _context.Categories.AsNoTracking().SingleOrDefault(category => category.Id == id);
+        }
+
+        public bool TryRenameCategory(int id, string name)
+        {
+            var category = _context.Categories.SingleOrDefault(category => category.Id == id);
+
+            if (category == null)
+            {
+                return false;
+            }
+
+            category.Rename(name);
+            _context.SaveChanges();
+            return true;
         }
     }
 }

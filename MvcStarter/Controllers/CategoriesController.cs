@@ -47,5 +47,42 @@ namespace MvcStarter.Controllers
 
             return RedirectToAction(nameof(Index));
         }
+
+        [HttpGet]
+        public IActionResult Edit(int id)
+        {
+            var category = _todoStore.GetCategoryById(id);
+            if (category == null)
+            {
+                return NotFound();
+            }
+
+            var model = new EditCategoryInputModel { Id = category.Id, Name = category.Name };
+            return View(model);
+        }
+
+        [ValidateAntiForgeryToken]
+        [HttpPost]
+        public IActionResult Edit(EditCategoryInputModel input)
+        {
+            if (ModelState.IsValid && _todoStore.CategoryNameExists(input.Name!, input.Id))
+            {
+                ModelState.AddModelError(nameof(input.Name), "A category with this name already exists.");
+            }
+
+            if (!ModelState.IsValid)
+            {
+                return View(input);
+            }
+
+            if (!_todoStore.TryRenameCategory(input.Id, input.Name!))
+            {
+                return NotFound();
+            }
+
+            TempData["Success"] = "Category updated";
+
+            return RedirectToAction(nameof(Index));
+        }
     }
 }
