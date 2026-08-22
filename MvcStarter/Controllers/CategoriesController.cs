@@ -84,5 +84,25 @@ namespace MvcStarter.Controllers
 
             return RedirectToAction(nameof(Index));
         }
+
+        [ValidateAntiForgeryToken]
+        [HttpPost]
+        public IActionResult Delete(int id)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            if (!_todoStore.TryDeleteCategory(id))
+            {
+                return NotFound();
+            }
+
+            TempData["Success"] = "Category deleted.";
+
+            return RedirectToAction(nameof(Index));
+
+        }
     }
 }

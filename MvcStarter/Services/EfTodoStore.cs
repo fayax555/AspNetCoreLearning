@@ -147,5 +147,20 @@ namespace MvcStarter.Services
             _context.SaveChanges();
             return true;
         }
+
+        public bool TryDeleteCategory(int id)
+        {
+            var category = _context.Categories.SingleOrDefault(category => category.Id == id);
+
+            if (category == null)
+            {
+                return false;
+            }
+
+            _context.Categories.Remove(category);
+            _context.SaveChanges();
+
+            return true;
+        }
     }
 }
