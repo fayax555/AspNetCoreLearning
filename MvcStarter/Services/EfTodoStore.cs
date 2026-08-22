@@ -95,5 +95,15 @@ namespace MvcStarter.Services
             _context.SaveChanges();
             return true;
         }
+
+        public IReadOnlyList<TodoItem> GetByCategoryId(int categoryId)
+        {
+            return _context.Todos.AsNoTracking()
+                .Where(todo => todo.CategoryId == categoryId)
+                .OrderBy(todo => todo.IsCompleted)
+                .ThenBy(todo => todo.Priority)
+                .ThenBy(todo => todo.Id)
+                .ToList();
+        }
     }
 }

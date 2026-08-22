@@ -7,10 +7,12 @@ namespace MvcStarter.Controllers
     public class CategoriesController : Controller
     {
         private readonly EfCategoryStore _categoryStore;
+        private readonly EfTodoStore _todoStore;
 
-        public CategoriesController(EfCategoryStore categoryStore)
+        public CategoriesController(EfCategoryStore categoryStore, EfTodoStore todoStore)
         {
             _categoryStore = categoryStore;
+            _todoStore = todoStore;
         }
 
         [HttpGet]
@@ -102,7 +104,24 @@ namespace MvcStarter.Controllers
             TempData["Success"] = "Category deleted.";
 
             return RedirectToAction(nameof(Index));
+        }
 
+        [HttpGet]
+        public IActionResult Details(int id)
+        {
+            var category = _categoryStore.GetCategoryById(id);
+            if (category == null)
+            {
+                return NotFound();
+            }
+
+            var model = new CategoryDetailsViewModel
+            {
+                Category = category,
+                Todos = _todoStore.GetByCategoryId(id)
+            };
+
+            return View(model);
         }
     }
 }

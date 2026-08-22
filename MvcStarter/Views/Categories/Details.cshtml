@@ -1,0 +1,23 @@
+﻿@model CategoryDetailsViewModel
+
+@{
+    ViewData["Title"] = "Category details";
+}
+
+<a asp-action="Index">Back to categories</a>
+
+<h1>@Model.Category.Name</h1>
+
+@if (Model.Todos.Count == 0)
+{
+    <p>There are no tasks in this category.</p>
+}
+else
+{
+    <ul>
+        @foreach (var todo in Model.Todos)
+        {
+            <li>@todo.Title - @todo.Priority - @todo.IsCompleted</li>
+        }
+    </ul>
+}
