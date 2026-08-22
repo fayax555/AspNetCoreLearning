@@ -7,6 +7,7 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 builder.Services.AddScoped<EfTodoStore>();
+builder.Services.AddScoped<EfCategoryStore>();
 
 var connectionString =
     builder.Configuration.GetConnectionString("TodoDatabase")

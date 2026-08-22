@@ -6,17 +6,17 @@ namespace MvcStarter.Controllers
 {
     public class CategoriesController : Controller
     {
-        private readonly EfTodoStore _todoStore;
+        private readonly EfCategoryStore _categoryStore;
 
-        public CategoriesController(EfTodoStore todoStore)
+        public CategoriesController(EfCategoryStore categoryStore)
         {
-            _todoStore = todoStore;
+            _categoryStore = categoryStore;
         }
 
         [HttpGet]
         public IActionResult Index()
         {
-            var categories = _todoStore.GetCategories();
+            var categories = _categoryStore.GetCategories();
 
             return View(categories);
         }
@@ -32,7 +32,7 @@ namespace MvcStarter.Controllers
         [HttpPost]
         public IActionResult Create(CreateCategoryInputModel input)
         {
-            if (ModelState.IsValid && _todoStore.CategoryNameExists(input.Name!))
+            if (ModelState.IsValid && _categoryStore.CategoryNameExists(input.Name!))
             {
                 ModelState.AddModelError(nameof(input.Name), "A category with this name already exists.");
             }
@@ -42,7 +42,7 @@ namespace MvcStarter.Controllers
                 return View(input);
             }
 
-            _todoStore.AddCategory(input.Name!);
+            _categoryStore.AddCategory(input.Name!);
             TempData["Success"] = "Category added.";
 
             return RedirectToAction(nameof(Index));
@@ -51,7 +51,7 @@ namespace MvcStarter.Controllers
         [HttpGet]
         public IActionResult Edit(int id)
         {
-            var category = _todoStore.GetCategoryById(id);
+            var category = _categoryStore.GetCategoryById(id);
             if (category == null)
             {
                 return NotFound();
@@ -65,7 +65,7 @@ namespace MvcStarter.Controllers
         [HttpPost]
         public IActionResult Edit(EditCategoryInputModel input)
         {
-            if (ModelState.IsValid && _todoStore.CategoryNameExists(input.Name!, input.Id))
+            if (ModelState.IsValid && _categoryStore.CategoryNameExists(input.Name!, input.Id))
             {
                 ModelState.AddModelError(nameof(input.Name), "A category with this name already exists.");
             }
@@ -75,7 +75,7 @@ namespace MvcStarter.Controllers
                 return View(input);
             }
 
-            if (!_todoStore.TryRenameCategory(input.Id, input.Name!))
+            if (!_categoryStore.TryRenameCategory(input.Id, input.Name!))
             {
                 return NotFound();
             }
@@ -94,7 +94,7 @@ namespace MvcStarter.Controllers
                 return BadRequest(ModelState);
             }
 
-            if (!_todoStore.TryDeleteCategory(id))
+            if (!_categoryStore.TryDeleteCategory(id))
             {
                 return NotFound();
             }

@@ -7,10 +7,12 @@ namespace MvcStarter.Controllers
     public class TodosController : Controller
     {
         private readonly EfTodoStore _todoStore;
+        private readonly EfCategoryStore _categoryStore;
 
-        public TodosController(EfTodoStore todoStore)
+        public TodosController(EfTodoStore todoStore, EfCategoryStore categoryStore)
         {
             _todoStore = todoStore;
+            _categoryStore = categoryStore;
         }
 
         [HttpGet]
@@ -40,7 +42,7 @@ namespace MvcStarter.Controllers
                 CurrentPage = page,
                 TotalPages = totalPages,
                 SelectedCategoryId = selectedCategoryId,
-                Categories = _todoStore.GetCategories(),
+                Categories = _categoryStore.GetCategories(),
             };
 
             return View(model);
@@ -51,7 +53,7 @@ namespace MvcStarter.Controllers
         {
             var model = new CreateTodoInputModel
             {
-                Categories = _todoStore.GetCategories()
+                Categories = _categoryStore.GetCategories()
             };
 
             return View(model);
@@ -61,14 +63,14 @@ namespace MvcStarter.Controllers
         [HttpPost]
         public IActionResult Create(CreateTodoInputModel input)
         {
-            if (input.CategoryId.HasValue && !_todoStore.CategoryExists(input.CategoryId.Value))
+            if (input.CategoryId.HasValue && !_categoryStore.CategoryExists(input.CategoryId.Value))
             {
                 ModelState.AddModelError(nameof(input.CategoryId), "Please select a valid category.");
             }
 
             if (!ModelState.IsValid)
             {
-                input.Categories = _todoStore.GetCategories();
+                input.Categories = _categoryStore.GetCategories();
                 return View(input);
             }
 
@@ -155,7 +157,7 @@ namespace MvcStarter.Controllers
                 Title = todoInDb.Title,
                 Priority = todoInDb.Priority,
                 CategoryId = todoInDb.CategoryId,
-                Categories = _todoStore.GetCategories(),
+                Categories = _categoryStore.GetCategories(),
             };
 
             return View(model);
@@ -165,14 +167,14 @@ namespace MvcStarter.Controllers
         [HttpPost]
         public IActionResult Edit(EditTodoInputModel input)
         {
-            if (input.CategoryId.HasValue && !_todoStore.CategoryExists(input.CategoryId.Value))
+            if (input.CategoryId.HasValue && !_categoryStore.CategoryExists(input.CategoryId.Value))
             {
                 ModelState.AddModelError(nameof(input.CategoryId), "Please select a valid category.");
             }
 
             if (!ModelState.IsValid)
             {
-                input.Categories = _todoStore.GetCategories();
+                input.Categories = _categoryStore.GetCategories();
                 return View(input);
             }
 
