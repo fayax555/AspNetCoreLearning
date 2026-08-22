@@ -33,9 +33,9 @@ namespace MvcStarter.Data
                     .OnDelete(DeleteBehavior.SetNull);
 
                 entity.HasData(
-                    new TodoItem(1, "Learn C#", TodoPriority.High, true),  
-                    new TodoItem(2, "Build MVC app", TodoPriority.Medium, false),  
-                    new TodoItem(3, "Go for a walk", TodoPriority.Low, false)  
+                    new TodoItem(1, "Learn C#", TodoPriority.High, true),
+                    new TodoItem(2, "Build MVC app", TodoPriority.Medium, false),
+                    new TodoItem(3, "Go for a walk", TodoPriority.Low, false)
                 );
             });
 
@@ -47,11 +47,13 @@ namespace MvcStarter.Data
                     .IsRequired()
                     .HasMaxLength(50);
 
+                entity.HasIndex(category => category.Name)
+                .IsUnique();
+
                 entity.HasData(
                     new Category(1, "Work"),
                     new Category(2, "Personal")
                 );
-
             });
         }
     }
