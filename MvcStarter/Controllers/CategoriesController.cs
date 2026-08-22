@@ -87,9 +87,22 @@ namespace MvcStarter.Controllers
             return RedirectToAction(nameof(Index));
         }
 
+        [HttpGet]
+        public IActionResult Delete(int id)
+        {
+            var category = _categoryStore.GetCategoryById(id);
+
+            if (category == null)
+            {
+                return NotFound();
+            }
+
+            return View(category);
+        }
+
         [ValidateAntiForgeryToken]
         [HttpPost]
-        public IActionResult Delete(int id)
+        public IActionResult DeleteConfirmed(int id)
         {
             if (!ModelState.IsValid)
             {

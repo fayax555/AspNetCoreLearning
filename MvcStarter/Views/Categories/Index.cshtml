@@ -26,9 +26,7 @@ else
                 @category.Name
                 <a asp-action="Details" asp-route-id="@category.Id">Details</a>
                 <a asp-action="Edit" asp-route-id="@category.Id">Edit</a>
-                <form method="post" asp-action="Delete" asp-route-id="@category.Id">
-                    <button type="submit">Delete</button>
-                </form>
+                <a asp-action="Delete" asp-route-id="@category.Id">Delete</a>
             </li>
         }
     </ul>
