@@ -2,6 +2,8 @@
 
 @{
     ViewData["Title"] = "Todos";
+
+    var currentDate = DateOnly.FromDateTime(DateTime.Today);
 }
 
 @if (TempData["SuccessMessage"] is string message)
@@ -44,6 +46,11 @@ else
             <li>
                 [@(todo.IsCompleted ? "x" : " ")] @todo.Title - Priority: @todo.Priority - Category: @(todo.Category?.Name ?? "None")
                 - Due Date: @(todo.DueDate?.ToString("yyyy-MM-dd") ?? "None")
+
+                @if (todo.IsOverdue(currentDate))
+                {
+                    <strong>Overdue</strong>
+                }
 
                 @if (!todo.IsCompleted)
                 {

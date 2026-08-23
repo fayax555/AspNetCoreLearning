@@ -72,5 +72,10 @@
         {
             DueDate = dueDate;
         }
+
+        public bool IsOverdue(DateOnly currentDate)
+        {
+            return !IsCompleted && DueDate.HasValue && DueDate.Value < currentDate;
+        }
     }
 }

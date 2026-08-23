@@ -2,6 +2,8 @@
 
 @{
     ViewData["Title"] = "Todo Details";
+
+    var currentDate = DateOnly.FromDateTime(DateTime.Today);
 }
 
 <h1>@ViewData["Title"]</h1>
@@ -15,4 +17,9 @@
     <li>Priority: @Model.Priority</li>
     <li>Due date: @(Model.DueDate?.ToString("yyyy-MM-dd") ?? "None")</li>
     <li>Category: @(Model.Category?.Name ?? "None")</li>
+
+    @if (Model.IsOverdue(currentDate))
+    {
+        <li><strong>Overdue</strong></li>
+    }
 </ul>
