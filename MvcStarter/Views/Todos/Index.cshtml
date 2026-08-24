@@ -35,6 +35,14 @@
     <button type="submit">Search</button>
 </form>
 
+@if (!string.IsNullOrWhiteSpace(Model.Search)
+    || Model.SelectedPriority.HasValue
+    || Model.SelectedCategoryId.HasValue
+    || Model.OverdueOnly)
+{
+    <a asp-action="Index">Clear filters</a>
+}
+
 <a asp-action="Create">Create Todo</a>
 
 @if (Model.Todos.Count == 0)
