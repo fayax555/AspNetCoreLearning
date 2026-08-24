@@ -16,14 +16,9 @@ namespace MvcStarter.Controllers
         }
 
         [HttpGet]
-        public IActionResult Index(
-            string? search,
-            TodoPriority? selectedPriority,
-            int? selectedCategoryId,
-            bool overdueOnly = false,
-            int page = 1)
+        public IActionResult Index(TodoFilterInputModel input)
         {
-            if (page < 1)
+            if (input.Page < 1)
             {
                 return BadRequest();
             }
@@ -32,17 +27,17 @@ namespace MvcStarter.Controllers
 
             var currentDate = DateOnly.FromDateTime(DateTime.Today);
             var (pageTodos, totalCount) = _todoStore.GetFilteredTodos(
-                search,
-                selectedPriority,
-                selectedCategoryId,
-                overdueOnly,
+                input.Search,
+                input.SelectedPriority,
+                input.SelectedCategoryId,
+                input.OverdueOnly,
                 currentDate,
-                page,
+                input.Page,
                 pageSize);
 
             var totalPages = (int)Math.Ceiling(totalCount / (double)pageSize);
 
-            if (totalPages > 0 && page > totalPages)
+            if (totalPages > 0 && input.Page > totalPages)
             {
                 return NotFound();
             }
@@ -50,12 +45,12 @@ namespace MvcStarter.Controllers
             var model = new TodoIndexViewModel
             {
                 Todos = pageTodos,
-                Search = search,
-                SelectedPriority = selectedPriority,
-                CurrentPage = page,
+                Search = input.Search,
+                SelectedPriority = input.SelectedPriority,
+                CurrentPage = input.Page,
                 TotalPages = totalPages,
-                SelectedCategoryId = selectedCategoryId,
-                OverdueOnly = overdueOnly,
+                SelectedCategoryId = input.SelectedCategoryId,
+                OverdueOnly = input.OverdueOnly,
                 Categories = _categoryStore.GetCategories(),
             };
 
