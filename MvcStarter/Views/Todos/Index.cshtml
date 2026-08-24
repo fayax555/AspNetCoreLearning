@@ -29,6 +29,9 @@
         }
     </select>
 
+    <input asp-for="OverdueOnly" />
+    <label asp-for="OverdueOnly">Overdue Only</label>
+
     <button type="submit">Search</button>
 </form>
 
@@ -78,6 +81,7 @@ else
             <a asp-action="Index"
                asp-route-search="@Model.Search"
                asp-route-selectedPriority="@Model.SelectedPriority"
+               asp-route-overdueOnly="@Model.OverdueOnly"
                asp-route-page="@(Model.CurrentPage - 1)"
                asp-route-selectedCategoryId="@(Model.SelectedCategoryId)">
                 Previous
@@ -91,6 +95,7 @@ else
             <a asp-action="Index"
                asp-route-search="@Model.Search"
                asp-route-selectedPriority="@Model.SelectedPriority"
+               asp-route-overdueOnly="@Model.OverdueOnly"
                asp-route-page="@(Model.CurrentPage + 1)"
                asp-route-selectedCategoryId="@(Model.SelectedCategoryId)">
                 Next

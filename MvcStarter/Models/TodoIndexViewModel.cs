@@ -10,5 +10,6 @@ namespace MvcStarter.Models
         public int TotalPages { get; set; }
         public int? SelectedCategoryId { get; set; }
         public IReadOnlyList<Category> Categories { get; set; } = Array.Empty<Category>();
+        public bool OverdueOnly { get; set; }
     }
 }

@@ -16,7 +16,12 @@ namespace MvcStarter.Controllers
         }
 
         [HttpGet]
-        public IActionResult Index(string? search, TodoPriority? selectedPriority, int? selectedCategoryId, int page = 1)
+        public IActionResult Index(
+            string? search,
+            TodoPriority? selectedPriority,
+            int? selectedCategoryId,
+            bool overdueOnly = false,
+            int page = 1)
         {
             if (page < 1)
             {
@@ -25,7 +30,15 @@ namespace MvcStarter.Controllers
 
             const int pageSize = 3;
 
-            var (pageTodos, totalCount) = _todoStore.GetFilteredTodos(search, selectedPriority, selectedCategoryId, page, pageSize);
+            var currentDate = DateOnly.FromDateTime(DateTime.Today);
+            var (pageTodos, totalCount) = _todoStore.GetFilteredTodos(
+                search,
+                selectedPriority,
+                selectedCategoryId,
+                overdueOnly,
+                currentDate,
+                page,
+                pageSize);
 
             var totalPages = (int)Math.Ceiling(totalCount / (double)pageSize);
 
@@ -42,6 +55,7 @@ namespace MvcStarter.Controllers
                 CurrentPage = page,
                 TotalPages = totalPages,
                 SelectedCategoryId = selectedCategoryId,
+                OverdueOnly = overdueOnly,
                 Categories = _categoryStore.GetCategories(),
             };
 

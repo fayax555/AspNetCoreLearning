@@ -24,7 +24,13 @@ namespace MvcStarter.Services
         }
 
         public (IReadOnlyList<TodoItem> Todos, int TotalCount)
-            GetFilteredTodos(string? search, TodoPriority? priority, int? categoryId, int page, int pageSize)
+            GetFilteredTodos(string? search,
+            TodoPriority? priority,
+            int? categoryId,
+            bool overdueOnly,
+            DateOnly currentDate,
+            int page,
+            int pageSize)
         {
             var query = _context.Todos.Include(todo => todo.Category).AsNoTracking();
 
@@ -41,6 +47,11 @@ namespace MvcStarter.Services
             if (categoryId.HasValue)
             {
                 query = query.Where(todo => todo.CategoryId == categoryId);
+            }
+
+            if (overdueOnly)
+            {
+                query = query.Where(todo => !todo.IsCompleted && todo.DueDate.HasValue && todo.DueDate.Value < currentDate);
             }
 
             var totalCount = query.Count();
