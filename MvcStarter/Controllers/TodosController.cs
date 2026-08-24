@@ -18,9 +18,9 @@ namespace MvcStarter.Controllers
         [HttpGet]
         public IActionResult Index(TodoFilterInputModel input)
         {
-            if (input.Page < 1)
+            if (!ModelState.IsValid)
             {
-                return BadRequest();
+                return BadRequest(ModelState);
             }
 
             const int pageSize = 3;
