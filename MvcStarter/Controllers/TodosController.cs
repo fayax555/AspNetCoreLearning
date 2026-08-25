@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
 using MvcStarter.Models;
 using MvcStarter.Services;
+using MvcStarter.Settings;
 
 namespace MvcStarter.Controllers
 {
@@ -9,14 +11,18 @@ namespace MvcStarter.Controllers
         private readonly EfTodoStore _todoStore;
         private readonly EfCategoryStore _categoryStore;
         private readonly ILogger<TodosController> _logger;
-        private readonly IConfiguration _configuration;
+        private readonly TodoSettings _todoSettings;
 
-        public TodosController(EfTodoStore todoStore, EfCategoryStore categoryStore, ILogger<TodosController> logger, IConfiguration configuration)
+        public TodosController(
+            EfTodoStore todoStore,
+            EfCategoryStore categoryStore,
+            ILogger<TodosController> logger,
+            IOptions<TodoSettings> todoSettingsOptions)
         {
             _todoStore = todoStore;
             _categoryStore = categoryStore;
             _logger = logger;
-            _configuration = configuration;
+            _todoSettings = todoSettingsOptions.Value;
         }
 
         [HttpGet]
@@ -27,11 +33,7 @@ namespace MvcStarter.Controllers
                 return BadRequest(ModelState);
             }
 
-            var pageSize = _configuration.GetValue<int>("TodoSettings:PageSize");
-            if (pageSize < 1)
-            {
-                throw new InvalidOperationException("TodoSettings:PageSize must be greater than 0.");
-            }
+            var pageSize = _todoSettings.PageSize;
 
             var currentDate = DateOnly.FromDateTime(DateTime.Today);
             var (pageTodos, totalCount) = _todoStore.GetFilteredTodos(

@@ -1,11 +1,19 @@
 using Microsoft.EntityFrameworkCore;
 using MvcStarter.Data;
 using MvcStarter.Services;
+using MvcStarter.Settings;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+builder.Services
+    .AddOptions<TodoSettings>()
+    .Bind(builder.Configuration.GetSection(nameof(TodoSettings)))
+    .Validate(
+        settings => settings.PageSize > 0,
+        "TodoSettings:PageSize must be greater than 0.")
+    .ValidateOnStart();
 builder.Services.AddScoped<EfTodoStore>();
 builder.Services.AddScoped<EfCategoryStore>();
 
