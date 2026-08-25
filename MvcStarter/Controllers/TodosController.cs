@@ -125,6 +125,7 @@ namespace MvcStarter.Controllers
 
             if (!_todoStore.TryDelete(id))
             {
+                _logger.LogWarning("Could not delete todo {TodoId} because it was not found", id);
                 return NotFound();
             }
 
@@ -198,6 +199,7 @@ namespace MvcStarter.Controllers
 
             if (!_todoStore.TryUpdate(input.Id, input.Title!, input.Priority!.Value, input.DueDate, input.CategoryId))
             {
+                _logger.LogWarning("Could not edit todo {TodoId} because it was not found", input.Id);
                 return NotFound();
             }
 
