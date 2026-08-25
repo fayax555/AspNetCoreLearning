@@ -103,6 +103,7 @@ namespace MvcStarter.Controllers
 
             if (!_todoStore.TryMarkCompleted(id))
             {
+                _logger.LogWarning("Could not complete todo {TodoId} because it was not found", id);
                 return NotFound();
             }
 
