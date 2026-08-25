@@ -8,11 +8,13 @@ namespace MvcStarter.Controllers
     {
         private readonly EfTodoStore _todoStore;
         private readonly EfCategoryStore _categoryStore;
+        private readonly ILogger<TodosController> _logger;
 
-        public TodosController(EfTodoStore todoStore, EfCategoryStore categoryStore)
+        public TodosController(EfTodoStore todoStore, EfCategoryStore categoryStore, ILogger<TodosController> logger)
         {
             _todoStore = todoStore;
             _categoryStore = categoryStore;
+            _logger = logger;
         }
 
         [HttpGet]
@@ -83,7 +85,8 @@ namespace MvcStarter.Controllers
                 return View(input);
             }
 
-            _todoStore.Add(input.Title!, input.Priority!.Value, input.DueDate, input.CategoryId);
+            var todo = _todoStore.Add(input.Title!, input.Priority!.Value, input.DueDate, input.CategoryId);
+            _logger.LogInformation("Created todo {TodoId} with title {TodoTitle}", todo.Id, todo.Title);
 
             TempData["SuccessMessage"] = "Todo Created.";
             return RedirectToAction(nameof(Index));
@@ -103,6 +106,8 @@ namespace MvcStarter.Controllers
                 return NotFound();
             }
 
+            _logger.LogInformation("Completed todo {TodoId}", id);
+
             TempData["SuccessMessage"] = "Todo Completed.";
 
             return RedirectToAction(nameof(Index));
@@ -121,6 +126,8 @@ namespace MvcStarter.Controllers
             {
                 return NotFound();
             }
+
+            _logger.LogInformation("Deleted todo {TodoId}", id);
 
             TempData["SuccessMessage"] = "Todo Deleted.";
 
@@ -192,6 +199,8 @@ namespace MvcStarter.Controllers
             {
                 return NotFound();
             }
+
+            _logger.LogInformation("Updated todo {TodoId} with title {TodoTitle}", input.Id, input.Title);
 
             TempData["SuccessMessage"] = "Todo Edited.";
 
