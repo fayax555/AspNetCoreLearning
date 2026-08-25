@@ -9,12 +9,14 @@ namespace MvcStarter.Controllers
         private readonly EfTodoStore _todoStore;
         private readonly EfCategoryStore _categoryStore;
         private readonly ILogger<TodosController> _logger;
+        private readonly IConfiguration _configuration;
 
-        public TodosController(EfTodoStore todoStore, EfCategoryStore categoryStore, ILogger<TodosController> logger)
+        public TodosController(EfTodoStore todoStore, EfCategoryStore categoryStore, ILogger<TodosController> logger, IConfiguration configuration)
         {
             _todoStore = todoStore;
             _categoryStore = categoryStore;
             _logger = logger;
+            _configuration = configuration;
         }
 
         [HttpGet]
@@ -25,7 +27,7 @@ namespace MvcStarter.Controllers
                 return BadRequest(ModelState);
             }
 
-            const int pageSize = 3;
+            var pageSize = _configuration.GetValue<int>("TodoSettings:PageSize");
 
             var currentDate = DateOnly.FromDateTime(DateTime.Today);
             var (pageTodos, totalCount) = _todoStore.GetFilteredTodos(
