@@ -28,6 +28,10 @@ namespace MvcStarter.Controllers
             }
 
             var pageSize = _configuration.GetValue<int>("TodoSettings:PageSize");
+            if (pageSize < 1)
+            {
+                throw new InvalidOperationException("TodoSettings:PageSize must be greater than 0.");
+            }
 
             var currentDate = DateOnly.FromDateTime(DateTime.Today);
             var (pageTodos, totalCount) = _todoStore.GetFilteredTodos(
