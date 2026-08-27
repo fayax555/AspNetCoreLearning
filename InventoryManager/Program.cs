@@ -1,7 +1,16 @@
+using Microsoft.EntityFrameworkCore;
+using InventoryManager.Data;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+
+var connectionString =
+    builder.Configuration.GetConnectionString("InventoryDatabase")
+    ?? throw new InvalidOperationException("Connection string 'InventoryDatabase' was not found");
+
+builder.Services.AddDbContext<InventoryDbContext>(options => options.UseSqlite(connectionString));
 
 var app = builder.Build();
 

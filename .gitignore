@@ -366,3 +366,7 @@ FodyWeavers.xsd
 MvcStarter/todos.db
 MvcStarter/todos.db-shm
 MvcStarter/todos.db-wal
+
+InventoryManager/inventory.db
+InventoryManager/inventory.db-shm
+InventoryManager/inventory.db-wal
