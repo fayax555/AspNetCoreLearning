@@ -29,11 +29,6 @@ namespace InventoryManager.Controllers
         [HttpPost]
         public IActionResult Create(CategoryInputModel input)
         {
-            if (string.IsNullOrWhiteSpace(input.Name))
-            {
-                ModelState.AddModelError(nameof(input.Name), "Please provide category a name");
-            }
-
             if (!ModelState.IsValid) return View(input);
 
             var trimmedName = input.Name!.Trim();
@@ -53,6 +48,50 @@ namespace InventoryManager.Controllers
             _context.SaveChanges();
 
             TempData["Success"] = "Category has been added";
+
+            return RedirectToAction(nameof(Index));
+        }
+
+        [HttpGet]
+        public IActionResult Edit(int id)
+        {
+            var category = _context.Categories.SingleOrDefault(category => category.Id == id);
+
+            if (category == null) return NotFound();
+
+            var model = new EditCategoryInputModel { Id = id, Name = category.Name };
+            return View(model);
+        }
+
+        [ValidateAntiForgeryToken]
+        [HttpPost]
+        public IActionResult Edit(EditCategoryInputModel input)
+        {
+            if (!ModelState.IsValid) return View(input);
+
+            var trimmedName = input.Name!.Trim();
+            var categoryExists = _context.Categories.Any(category =>
+                category.Name.ToUpper() == trimmedName.ToUpper() && category.Id != input.Id);
+
+            if (categoryExists)
+            {
+                ModelState.AddModelError(nameof(input.Name), "Category name already exists");
+            }
+
+            if (!ModelState.IsValid) return View(input);
+
+            var category = _context.Categories.SingleOrDefault(category => category.Id == input.Id);
+
+            if (category == null)
+            {
+                return NotFound();
+            }
+
+            category.Name = trimmedName;
+
+            _context.SaveChanges();
+
+            TempData["Success"] = "Category has been updated";
 
             return RedirectToAction(nameof(Index));
         }

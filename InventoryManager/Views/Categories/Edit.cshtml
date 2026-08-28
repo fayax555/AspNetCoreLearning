@@ -1,0 +1,19 @@
+﻿@model EditCategoryInputModel
+
+@{
+    ViewData["Title"] = "Edit category";
+}
+
+<h1>Edit Category</h1>
+
+<a asp-action="Index">Back to categories</a>
+
+<form method="post" asp-action="Edit">
+    <input asp-for="Id" type="hidden"/>
+
+    <label asp-for="Name">Name</label>
+    <input asp-for="Name"/>
+    <span asp-validation-for="Name"></span>
+
+    <button type="submit">Save</button>
+</form>
