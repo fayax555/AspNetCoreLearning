@@ -6,9 +6,14 @@
 
 <h1>Categories</h1>
 
-@if (TempData["Success"] is string message)
+@if (TempData["Success"] is string successMessage)
 {
-    <p>@message</p>
+    <p>@successMessage</p>
+}
+
+@if(TempData["Error"] is string errorMessage)
+{
+    <p>@errorMessage</p>
 }
 
 <a asp-action="Create">Create Category</a>
@@ -22,7 +27,13 @@ else
     <ul>
         @foreach (var category in Model)
         {
-            <li>@category.Name - <a asp-action="Edit" asp-route-id="@category.Id">Edit</a></li>
+            <li>
+                @category.Name -
+                <a asp-action="Edit" asp-route-id="@category.Id">Edit</a>
+                <form method="post" asp-action="Delete" asp-route-id="@category.Id">
+                    <button type="submit">Delete</button>
+                </form>
+            </li>
         }
     </ul>
 }

@@ -95,5 +95,26 @@ namespace InventoryManager.Controllers
 
             return RedirectToAction(nameof(Index));
         }
+
+        [ValidateAntiForgeryToken]
+        [HttpPost]
+        public IActionResult Delete(int id)
+        {
+            var category = _context.Categories.SingleOrDefault(category => category.Id == id);
+            if (category == null) return NotFound();
+
+            var categoryHasProducts = _context.Products.Any(product => product.CategoryId == id);
+            if (categoryHasProducts)
+            {
+                TempData["Error"] = "This category cannot be deleted because it contains products.";
+                return RedirectToAction(nameof(Index));
+            }
+
+            _context.Remove(category);
+            _context.SaveChanges();
+
+            TempData["Success"] = "Category has been deleted";
+            return RedirectToAction(nameof(Index));
+        }
     }
 }
