@@ -1,0 +1,79 @@
+﻿@model EditProductInputModel
+
+@{
+    ViewData["Title"] = "Edit product";
+}
+
+<h1>Edit product</h1>
+
+<a asp-action="Index">Back to products</a>
+
+<form method="post" asp-action="Edit">
+    <input asp-for="Id" type="hidden" />
+    <div>
+        <label asp-for="Name">Name</label>
+        <input asp-for="Name" />
+        <span asp-validation-for="Name"></span>
+    </div>
+
+    <div>
+        <label asp-for="Sku">Sku</label>
+        <input asp-for="Sku" />
+        <span asp-validation-for="Sku"></span>
+    </div>
+
+    <div>
+        <label asp-for="Description">Description</label>
+        <textarea asp-for="Description"></textarea>
+        <span asp-validation-for="Description"></span>
+    </div>
+
+    <div>
+        <label asp-for="QuantityInStock">QuantityInStock</label>
+        <input asp-for="QuantityInStock" />
+        <span asp-validation-for="QuantityInStock"></span>
+    </div>
+
+    <div>
+        <label asp-for="ReorderLevel">ReorderLevel</label>
+        <input asp-for="ReorderLevel" />
+        <span asp-validation-for="ReorderLevel"></span>
+    </div>
+
+    <div>
+        <label asp-for="UnitPrice">UnitPrice</label>
+        <input asp-for="UnitPrice" />
+        <span asp-validation-for="UnitPrice"></span>
+    </div>
+
+    <div>
+        <label asp-for="LastRestockedOn">LastRestockedOn</label>
+        <input asp-for="LastRestockedOn" />
+        <span asp-validation-for="LastRestockedOn"></span>
+    </div>
+
+    <div>
+        <label asp-for="IsDiscontinued">IsDiscontinued</label>
+        <input asp-for="IsDiscontinued" />
+        <span asp-validation-for="IsDiscontinued"></span>
+    </div>
+
+    <div>
+        <label asp-for="CategoryId">Categories</label>
+        <select asp-for="CategoryId">
+            <option value="">Select a category</option>
+            @foreach (var category in Model.Categories)
+            {
+                <option value="@category.Id">@category.Name</option>
+            }
+        </select>
+        <span asp-validation-for="CategoryId"></span>
+    </div>
+
+    <button type="submit">Submit</button>
+</form>
+
+@section Scripts
+{
+    <partial name="_ValidationScriptsPartial" />
+}
