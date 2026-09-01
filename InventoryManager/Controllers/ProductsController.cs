@@ -163,5 +163,21 @@ namespace InventoryManager.Controllers
 
             return RedirectToAction(nameof(Index));
         }
+
+        [ValidateAntiForgeryToken]
+        [HttpPost]
+        public IActionResult Delete(int id)
+        {
+            var product = _context.Products.SingleOrDefault(product => product.Id == id);
+
+            if (product == null) return NotFound();
+
+            _context.Remove(product);
+            _context.SaveChanges();
+
+            TempData["Success"] = "Product deleted";
+
+            return RedirectToAction(nameof(Index));
+        }
     }
 }

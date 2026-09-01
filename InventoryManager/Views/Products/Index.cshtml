@@ -44,7 +44,12 @@ else
                     <td>@product.ReorderLevel</td>
                     <td>@product.UnitPrice</td>
                     <td>@product.IsDiscontinued</td>
-                    <td><a asp-action="Edit" asp-route-id="@product.Id">Edit</a></td>
+                    <td>
+                        <a asp-action="Edit" asp-route-id="@product.Id">Edit</a>
+                        <form method="post" asp-action="Delete" asp-route-id="@product.Id">
+                            <button>Delete</button>
+                        </form>
+                    </td>
                 </tr>
             }
         </tbody>
