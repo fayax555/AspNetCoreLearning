@@ -1,4 +1,4 @@
-﻿@model IReadOnlyList<Product>
+﻿@model ProductIndexViewModel
 
 @{
     ViewData["Title"] = "Products";
@@ -11,9 +11,16 @@
     <p>@successMessage</p>
 }
 
+<form method="get" asp-action="Index">
+    <label asp-for="Search">Search</label>
+    <input asp-for="Search" />
+    <button type="submit">Search</button>
+    <a asp-action="Index">Clear</a>
+</form>
+
 <a asp-action="Create">Create product</a>
 
-@if (Model.Count == 0)
+@if (Model.Products.Count == 0)
 {
     <p>There are no products.</p>
 }
@@ -34,7 +41,7 @@ else
         </thead>
 
         <tbody>
-            @foreach (var product in Model)
+            @foreach (var product in Model.Products)
             {
                 <tr>
                     <td>@product.Name</td>

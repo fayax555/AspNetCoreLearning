@@ -14,13 +14,29 @@ namespace InventoryManager.Controllers
             _context = dbContext;
         }
 
-        public IActionResult Index()
+        public IActionResult Index(string? search)
         {
-            var products = _context.Products
-                .Include(product => product.Category)
-                .OrderBy(product => product.Name)
-                .ToList();
-            return View(products);
+            IQueryable<Product> products = _context.Products
+                .Include(product => product.Category);
+
+            if (!string.IsNullOrWhiteSpace(search))
+            {
+                var searchTrimmed = search.Trim();
+                var searchNormalized = searchTrimmed.ToUpper();
+                products = products.Where(product =>
+                    product.Name.ToUpper().Contains(searchNormalized) ||
+                    product.Sku.ToUpper().Contains(searchNormalized));
+            }
+
+            var productList = products.OrderBy(product => product.Name).ToList();
+
+            var model = new ProductIndexViewModel
+            {
+                Products = productList,
+                Search = search?.Trim(),
+            };
+
+            return View(model);
         }
 
         [HttpGet]
