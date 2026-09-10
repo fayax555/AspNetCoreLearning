@@ -4,73 +4,83 @@
     ViewData["Title"] = "Create Product";
 }
 
-<h1>Create product</h1>
+<div class="mx-auto max-w-2xl">
+    <div class="mb-8 flex items-center justify-between">
+        <div>
+            <h1 class="text-3xl font-bold text-slate-900">Create product</h1>
+            <p class="mt-2 text-sm text-slate-600">Add a new product to the inventory.</p>
+        </div>
 
-<a asp-action="Index">Back to products</a>
-
-<form method="post" asp-action="Create">
-    <div>
-        <label asp-for="Name">Name</label>
-        <input asp-for="Name" />
-        <span asp-validation-for="Name"></span>
+        <a class="text-sm font-medium text-blue-600 hover:text-blue-700" asp-action="Index">Back to products</a>
     </div>
 
-    <div>
-        <label asp-for="Sku">Sku</label>
-        <input asp-for="Sku" />
-        <span asp-validation-for="Sku"></span>
-    </div>
+    <form class="space-y-6 rounded-lg border border-slate-200 bg-white p-6 shadow-sm" method="post" asp-action="Create">
+        <div>
+            <label class="block text-sm font-medium text-slate-700" asp-for="Name">Name</label>
+            <input class="mt-1 block w-full rounded-md border border-slate-300 bg-white px-3 py-2 text-slate-900 shadow-sm outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200" asp-for="Name" />
+            <span class="mt-1 block text-sm text-red-600" asp-validation-for="Name"></span>
+        </div>
 
-    <div>
-        <label asp-for="Description">Description</label>
-        <textarea asp-for="Description"></textarea>
-        <span asp-validation-for="Description"></span>
-    </div>
+        <div>
+            <label class="block text-sm font-medium text-slate-700" asp-for="Sku">SKU</label>
+            <input class="mt-1 block w-full rounded-md border border-slate-300 bg-white px-3 py-2 text-slate-900 shadow-sm outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200" asp-for="Sku" />
+            <span class="mt-1 block text-sm text-red-600" asp-validation-for="Sku"></span>
+        </div>
 
-   <div>
-        <label asp-for="QuantityInStock">QuantityInStock</label>
-        <input asp-for="QuantityInStock" />
-        <span asp-validation-for="QuantityInStock"></span>
-   </div>
+        <div>
+            <label class="block text-sm font-medium text-slate-700" asp-for="Description">Description</label>
+            <textarea class="mt-1 block w-full rounded-md border border-slate-300 bg-white px-3 py-2 text-slate-900 shadow-sm outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200" asp-for="Description" rows="4"></textarea>
+            <span class="mt-1 block text-sm text-red-600" asp-validation-for="Description"></span>
+        </div>
 
-   <div>
-        <label asp-for="ReorderLevel">ReorderLevel</label>
-        <input asp-for="ReorderLevel" />
-        <span asp-validation-for="ReorderLevel"></span>
-   </div>
+        <div>
+            <label class="block text-sm font-medium text-slate-700" asp-for="QuantityInStock">Quantity in stock</label>
+            <input class="mt-1 block w-full rounded-md border border-slate-300 bg-white px-3 py-2 text-slate-900 shadow-sm outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200" asp-for="QuantityInStock" />
+            <span class="mt-1 block text-sm text-red-600" asp-validation-for="QuantityInStock"></span>
+        </div>
 
-    <div>
-        <label asp-for="UnitPrice">UnitPrice</label>
-        <input asp-for="UnitPrice" />
-        <span asp-validation-for="UnitPrice"></span>
-    </div>
+        <div>
+            <label class="block text-sm font-medium text-slate-700" asp-for="ReorderLevel">Reorder level</label>
+            <input class="mt-1 block w-full rounded-md border border-slate-300 bg-white px-3 py-2 text-slate-900 shadow-sm outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200" asp-for="ReorderLevel" />
+            <span class="mt-1 block text-sm text-red-600" asp-validation-for="ReorderLevel"></span>
+        </div>
 
-    <div>
-        <label asp-for="LastRestockedOn">LastRestockedOn</label>
-        <input asp-for="LastRestockedOn" />
-        <span asp-validation-for="LastRestockedOn"></span>
-    </div>
+        <div>
+            <label class="block text-sm font-medium text-slate-700" asp-for="UnitPrice">Unit price</label>
+            <input class="mt-1 block w-full rounded-md border border-slate-300 bg-white px-3 py-2 text-slate-900 shadow-sm outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200" asp-for="UnitPrice" />
+            <span class="mt-1 block text-sm text-red-600" asp-validation-for="UnitPrice"></span>
+        </div>
 
-    <div>
-        <label asp-for="IsDiscontinued">IsDiscontinued</label>
-        <input asp-for="IsDiscontinued" />
-        <span asp-validation-for="IsDiscontinued"></span>
-    </div>
+        <div>
+            <label class="block text-sm font-medium text-slate-700" asp-for="LastRestockedOn">Last restocked on</label>
+            <input class="mt-1 block w-full rounded-md border border-slate-300 bg-white px-3 py-2 text-slate-900 shadow-sm outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200" asp-for="LastRestockedOn" />
+            <span class="mt-1 block text-sm text-red-600" asp-validation-for="LastRestockedOn"></span>
+        </div>
 
-    <div>
-        <label asp-for="CategoryId">Categories</label>
-        <select asp-for="CategoryId">
-            <option value="">Select a category</option>
-            @foreach(var category in Model.Categories)
-            {
-                <option value="@category.Id">@category.Name</option>
-            }
-        </select>
-        <span asp-validation-for="CategoryId"></span>
-    </div>
+        <div class="flex items-center gap-3">
+            <input class="h-4 w-4 cursor-pointer accent-blue-600" asp-for="IsDiscontinued" />
+            <label class="text-sm font-medium text-slate-700" asp-for="IsDiscontinued">Discontinued</label>
+            <span class="text-sm text-red-600" asp-validation-for="IsDiscontinued"></span>
+        </div>
 
-    <button type="submit">Submit</button>
-</form>
+        <div>
+            <label class="block text-sm font-medium text-slate-700" asp-for="CategoryId">Category</label>
+            <select class="mt-1 block w-full rounded-md border border-slate-300 bg-white px-3 py-2 text-slate-900 shadow-sm outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200" asp-for="CategoryId">
+                <option value="">Select a category</option>
+                @foreach (var category in Model.Categories)
+                {
+                    <option value="@category.Id">@category.Name</option>
+                }
+            </select>
+            <span class="mt-1 block text-sm text-red-600" asp-validation-for="CategoryId"></span>
+        </div>
+
+        <div class="flex items-center gap-3 border-t border-slate-200 pt-6">
+            <button class="rounded-md bg-blue-600 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-300" type="submit">Create product</button>
+            <a class="text-sm font-medium text-slate-600 hover:text-slate-900" asp-action="Index">Cancel</a>
+        </div>
+    </form>
+</div>
 
 @section Scripts
 {
