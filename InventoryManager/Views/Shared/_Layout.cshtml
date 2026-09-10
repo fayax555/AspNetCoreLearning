@@ -6,6 +6,7 @@
     <title>@ViewData["Title"] - InventoryManager</title>
     <script type="importmap"></script>
     <link rel="stylesheet" href="~/css/tailwind.css" asp-append-version="true" />
+    @await RenderSectionAsync("Styles", required: false)
 </head>
 <body class="flex min-h-screen flex-col bg-slate-50 text-slate-900">
     <header class="border-b border-slate-200 bg-white shadow-sm">
