@@ -29,7 +29,13 @@
 
         <div>
             <label class="block text-sm font-medium text-slate-700" asp-for="Description">Description</label>
-            <textarea class="mt-1 block w-full rounded-md border border-slate-300 bg-white px-3 py-2 text-slate-900 shadow-sm outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200" asp-for="Description" rows="4"></textarea>
+
+            <textarea asp-for="Description" hidden></textarea>
+
+            <div id="description-editor"
+                 class="min-h-32 bg-white">
+            </div>
+
             <span class="mt-1 block text-sm text-red-600" asp-validation-for="Description"></span>
         </div>
 
@@ -92,4 +98,29 @@
 @section Scripts
 {
     <partial name="_ValidationScriptsPartial" />
+
+    <script src="~/lib/quill/quill.js"></script>
+
+    <script>
+        const descriptionInput = document.querySelector('#Description');
+
+        const quill = new Quill("#description-editor", {
+            theme: "snow",
+            modules: {
+                toolbar: [
+                    ["bold", "italic", "underline"],
+                    ["clean"]
+                ]
+            }
+        });
+        
+        if (descriptionInput.value) {
+            quill.clipboard.dangerouslyPasteHTML(descriptionInput.value);
+        }
+
+        quill.on("text-change", () => {
+            const descriptionHasText = quill.getText().trim().length > 0;
+            descriptionInput.value = descriptionHasText ? quill.getSemanticHTML() : "";
+        });
+    </script>
 }
