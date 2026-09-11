@@ -14,7 +14,7 @@ namespace InventoryManager.Models
         [StringLength(30)]
         public string? Sku { get; set; }
 
-        [StringLength(500)]
+        [StringLength(5000)]
         public string? Description { get; set; }
 
         [Range(0, int.MaxValue)]

@@ -35,7 +35,7 @@ namespace InventoryManager.Data
 
                 entity.HasIndex(product => product.Sku).IsUnique();
 
-                entity.Property(product => product.Description).HasMaxLength(500);
+                entity.Property(product => product.Description).HasMaxLength(5000);
 
                 entity.Property(product => product.UnitPrice).HasPrecision(18, 2);
 
