@@ -24,7 +24,9 @@
 
     <div>
         <label asp-for="Description">Description</label>
-        <textarea asp-for="Description"></textarea>
+        <textarea asp-for="Description" hidden></textarea>
+        <div id="description-editor" class="min-h-32 bg-white"></div>
+
         <span asp-validation-for="Description"></span>
     </div>
 
@@ -73,7 +75,15 @@
     <button type="submit">Submit</button>
 </form>
 
+@section Styles
+{
+    <link rel="stylesheet" href="~/lib/quill/quill.snow.css" asp-append-version="true" />
+}
+
 @section Scripts
 {
     <partial name="_ValidationScriptsPartial" />
+
+    <script src="~/lib/quill/quill.js" asp-append-version="true"></script>
+    <script src="~/js/product-description-editor.js" asp-append-version="true"></script>
 }
