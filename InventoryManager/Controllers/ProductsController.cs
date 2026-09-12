@@ -2,16 +2,21 @@
 using InventoryManager.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Ganss.Xss;
 
 namespace InventoryManager.Controllers
 {
     public class ProductsController : Controller
     {
         private readonly InventoryDbContext _context;
+        private readonly IHtmlSanitizer _htmlSanitizer;
 
-        public ProductsController(InventoryDbContext dbContext)
+        public ProductsController(
+            InventoryDbContext dbContext,
+            IHtmlSanitizer htmlSanitizer)
         {
             _context = dbContext;
+            _htmlSanitizer = htmlSanitizer;
         }
 
         public IActionResult Index(string? search)
