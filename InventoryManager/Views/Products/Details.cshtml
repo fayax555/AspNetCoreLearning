@@ -1,0 +1,46 @@
+﻿@model Product
+
+@{
+    ViewData["Title"] = "Product details";
+}
+
+<h1>@Model.Name</h1>
+
+<dl>
+    <dt>SKU</dt>
+    <dd>@Model.Sku</dd>
+
+    <dt>Category</dt>
+    <dd>@Model.Category?.Name</dd>
+
+    <dt>Quantity in stock</dt>
+    <dd>@Model.QuantityInStock</dd>
+
+    <dt>Reorder level</dt>
+    <dd>@Model.ReorderLevel</dd>
+
+    <dt>Unit price</dt>
+    <dd>@Model.UnitPrice</dd>
+
+    <dt>Last restocked</dt>
+    <dd>@(Model.LastRestockedOn?.ToString("yyyy-MM-dd") ?? "Not recorded")</dd>
+
+    <dt>Discontinued</dt>
+    <dd>@(Model.IsDiscontinued ? "Yes" : "No")</dd>
+</dl>
+
+<h2>Description</h2>
+
+@if (string.IsNullOrWhiteSpace(Model.Description))
+{
+    <p>No description was provided.</p>
+}
+else
+{
+    <div>
+        @Html.Raw(Model.Description)
+    </div>
+}
+
+<a asp-action="Edit" asp-route-id="@Model.Id">Edit</a>
+<a asp-action="Index">Back to products</a>

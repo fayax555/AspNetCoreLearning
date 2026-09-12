@@ -53,6 +53,7 @@ else
                     <td>@product.IsDiscontinued</td>
                     <td>
                         <a asp-action="Edit" asp-route-id="@product.Id">Edit</a>
+                        <a asp-action="Details" asp-route-id="@product.Id">Details</a>
                         <form method="post" asp-action="Delete" asp-route-id="@product.Id">
                             <button>Delete</button>
                         </form>

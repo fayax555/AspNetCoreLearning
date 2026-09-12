@@ -195,5 +195,20 @@ namespace InventoryManager.Controllers
 
             return RedirectToAction(nameof(Index));
         }
+
+        [HttpGet]
+        public IActionResult Details(int id)
+        {
+            var product = _context.Products
+                .Include(product => product.Category)
+                .SingleOrDefault(product => product.Id == id);
+
+            if (product == null)
+            {
+                return NotFound();
+            }
+
+            return View(product);
+        }
     }
 }
