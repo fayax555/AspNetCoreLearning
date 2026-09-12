@@ -1,10 +1,20 @@
 using Microsoft.EntityFrameworkCore;
 using InventoryManager.Data;
+using Ganss.Xss;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+
+builder.Services.AddSingleton<IHtmlSanitizer>(_ =>
+    new HtmlSanitizer(new HtmlSanitizerOptions
+    {
+        AllowedTags = new HashSet<string>(StringComparer.OrdinalIgnoreCase)
+        {
+            "p", "br", "strong", "em", "u"
+        }
+    }));
 
 var connectionString =
     builder.Configuration.GetConnectionString("InventoryDatabase")
