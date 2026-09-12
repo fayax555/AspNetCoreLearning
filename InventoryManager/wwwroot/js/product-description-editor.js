@@ -2,6 +2,7 @@
 
 const quill = new Quill("#description-editor", {
     theme: "snow",
+    formats: ["bold", "italic", "underline"],
     modules: {
         toolbar: [
             ["bold", "italic", "underline"],
