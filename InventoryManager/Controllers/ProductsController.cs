@@ -215,5 +215,20 @@ namespace InventoryManager.Controllers
 
             return View(product);
         }
+
+        private string? SanitizeDescription(string? description)
+        {
+            if (string.IsNullOrWhiteSpace(description))
+            {
+                return null;
+            }
+
+            var sanitizedDescription =
+                _htmlSanitizer.Sanitize(description.Trim()).Trim();
+
+            return string.IsNullOrWhiteSpace(sanitizedDescription)
+                ? null
+                : sanitizedDescription;
+        }
     }
 }
