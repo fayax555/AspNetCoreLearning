@@ -150,6 +150,17 @@ namespace InventoryManager.Controllers
             var product = _context.Products.SingleOrDefault(product => product.Id == input.Id);
             if (product == null) return NotFound();
 
+            input.Description = SanitizeDescription(input.Description);
+
+            ModelState.Remove(nameof(input.Description));
+
+            if (input.Description?.Length > 5000)
+            {
+                ModelState.AddModelError(
+                    nameof(input.Description),
+                    "Description must be 5000 characters or fewer.");
+            }
+
             var categoryExists = _context.Categories
                 .Any((category) => category.Id == input.CategoryId);
 
@@ -181,7 +192,7 @@ namespace InventoryManager.Controllers
 
             product.Name = input.Name!.Trim();
             product.Sku = trimmedSku;
-            product.Description = string.IsNullOrWhiteSpace(input.Description) ? null : input.Description.Trim();
+            product.Description = input.Description;
             product.QuantityInStock = input.QuantityInStock;
             product.ReorderLevel = input.ReorderLevel;
             product.UnitPrice = input.UnitPrice;
