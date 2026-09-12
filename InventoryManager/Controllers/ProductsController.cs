@@ -120,7 +120,10 @@ namespace InventoryManager.Controllers
         [HttpGet]
         public IActionResult Edit(int id)
         {
-            var product = _context.Products.SingleOrDefault(product => product.Id == id);
+            var product = _context.Products
+                .AsNoTracking()
+                .SingleOrDefault(product => product.Id == id);
+
             if (product == null) return NotFound();
 
             var categories = _context.Categories.OrderBy(category => category.Name).ToList();
@@ -130,7 +133,7 @@ namespace InventoryManager.Controllers
                 Id = id,
                 Name = product.Name!.Trim(),
                 Sku = product.Sku,
-                Description = product.Description,
+                Description = SanitizeDescription(product.Description),
                 QuantityInStock = product.QuantityInStock,
                 ReorderLevel = product.ReorderLevel,
                 UnitPrice = product.UnitPrice,
@@ -227,6 +230,7 @@ namespace InventoryManager.Controllers
         public IActionResult Details(int id)
         {
             var product = _context.Products
+                .AsNoTracking()
                 .Include(product => product.Category)
                 .SingleOrDefault(product => product.Id == id);
 
@@ -234,6 +238,8 @@ namespace InventoryManager.Controllers
             {
                 return NotFound();
             }
+
+            product.Description = SanitizeDescription(product.Description);
 
             return View(product);
         }
