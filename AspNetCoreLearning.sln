@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MvcStarter", "MvcStarter\Mv
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InventoryManager", "InventoryManager\InventoryManager.csproj", "{CDE0640A-A48C-4D0F-9D02-4C2FB618489F}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Blog", "Blog\Blog.csproj", "{F98CB731-06A5-4EAF-9885-534BD432EF38}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{CDE0640A-A48C-4D0F-9D02-4C2FB618489F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CDE0640A-A48C-4D0F-9D02-4C2FB618489F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CDE0640A-A48C-4D0F-9D02-4C2FB618489F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F98CB731-06A5-4EAF-9885-534BD432EF38}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F98CB731-06A5-4EAF-9885-534BD432EF38}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F98CB731-06A5-4EAF-9885-534BD432EF38}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F98CB731-06A5-4EAF-9885-534BD432EF38}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
