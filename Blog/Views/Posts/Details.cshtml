@@ -1,0 +1,14 @@
+﻿@model Post
+
+@{
+    ViewData["Title"] = Model.Title;
+}
+
+<div class="max-w-120 mx-auto grid gap-3 text-center">
+    <h1 class="font-semibold text-blue-900 text-center text-4xl">@Model.Title</h1>
+    <div class="flex gap-5 justify-center">
+        <p>@Model.User?.Name</p>
+        <p>@Model.CreatedAt</p>
+    </div>
+    <p class="text-lg">@Model.Content</p>
+</div>

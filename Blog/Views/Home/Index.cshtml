@@ -1,15 +1,20 @@
-﻿@{
+﻿@model ICollection<Post>
+
+@{
     ViewData["Title"] = "Home Page";
 }
 
-<section class="grid gap-3 p-4 max-w-100 mx-auto mt-10">
-    <div class="border p-2 rounded-md w-full">
-        <h2 class="text-lg font-semibold">title 1</h2>
-        <p class="">description</p>
-    </div>
+<a asp-controller="Posts" asp-action="Create" class="block w-20 text-center bg-slate-800 text-slate-50 rounded-md p-2">Create</a>
 
-    <div class="border p-2 rounded-md w-full">
-        <h2 class="text-lg font-semibold">title 2</h2>
-        <p class="">description</p>
-    </div>
+<section class="grid gap-3 p-4 max-w-100 mx-auto mt-10">
+    @foreach (var post in Model)
+    {
+        <a asp-controller="Posts" asp-action="Details" asp-route-id="@post.Id" class="border p-2 rounded-md w-full">
+            <h2 class="text-lg font-semibold">@post.Title</h2>
+            <div>
+                <p>@post.User?.Name</p>
+                <p>@post.CreatedAt</p>
+            </div>
+        </a>
+    }
 </section>
